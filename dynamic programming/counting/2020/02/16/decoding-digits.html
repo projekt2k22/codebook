@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Decoding digits | Project 2K22</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Decoding digits" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Given a positive number and digits mapping table, count number of possible decodings." />
+<meta property="og:description" content="Given a positive number and digits mapping table, count number of possible decodings." />
+<link rel="canonical" href="https://projekt2k22.github.io/codebook/dynamic%20programming/counting/2020/02/16/decoding-digits.html" />
+<meta property="og:url" content="https://projekt2k22.github.io/codebook/dynamic%20programming/counting/2020/02/16/decoding-digits.html" />
+<meta property="og:site_name" content="Project 2K22" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-02-16T00:00:00-06:00" />
+<script type="application/ld+json">
+{"url":"https://projekt2k22.github.io/codebook/dynamic%20programming/counting/2020/02/16/decoding-digits.html","@type":"BlogPosting","headline":"Decoding digits","dateModified":"2020-02-16T00:00:00-06:00","datePublished":"2020-02-16T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://projekt2k22.github.io/codebook/dynamic%20programming/counting/2020/02/16/decoding-digits.html"},"description":"Given a positive number and digits mapping table, count number of possible decodings.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/codebook/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://projekt2k22.github.io/codebook/feed.xml" title="Project 2K22" /><link rel="shortcut icon" type="image/x-icon" href="/codebook/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/codebook/">Project 2K22</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/codebook/about/">About Me</a><a class="page-link" href="/codebook/search/">Search</a><a class="page-link" href="/codebook/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Decoding digits</h1><p class="page-description">Given a positive number and digits mapping table, count number of possible decodings.</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-02-16T00:00:00-06:00" itemprop="datePublished">
+        Feb 16, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/codebook/categories/#dynamic programming">dynamic programming</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/codebook/categories/#counting">counting</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/projekt2k22/codebook/tree/master/_notebooks/2020-02-16-decoding-digits.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/codebook/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/projekt2k22/codebook/master?filepath=_notebooks%2F2020-02-16-decoding-digits.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/codebook/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/projekt2k22/codebook/blob/master/_notebooks/2020-02-16-decoding-digits.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/codebook/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-02-16-decoding-digits.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Problem">Problem<a class="anchor-link" href="#Problem"> </a></h2><p>Given a positive number and a mapping table shown below</p>
+
+<pre><code>1 -&gt; 'A'
+2 -&gt; 'B'
+...
+...
+26 -&gt; 'Z'</code></pre>
+<p>Count number of ways a positive number can be decoded. Example</p>
+<p><strong>Input</strong> 128</p>
+<blockquote><p>This can be decoded into [ABH, LH]</p>
+</blockquote>
+<p><strong>Output</strong> 2</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Solution">Solution<a class="anchor-link" href="#Solution"> </a></h2><h3 id="Brute-force">Brute force<a class="anchor-link" href="#Brute-force"> </a></h3><p>The problem $T(n)$ can be broken down to two subproblem.</p>
+<ol>
+<li>$T(n-1)$ if the last digit lies between $[1-9]$</li>
+<li>$T(n-2)$ if the last two digit lies between $[10-26]$</li>
+</ol>
+<p>So the solution is sum of solution of subproblem. i.e.
+
+$$ T(n) = T(n-1) + T(n-2)$$
+</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">decode_seq_brute_force</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    
+    <span class="c1"># base case</span>
+    <span class="k">if</span> <span class="n">start_pos</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">start_pos</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    
+    <span class="n">total_count</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1"># subproblem T(n-1)</span>
+    <span class="k">if</span> <span class="s1">&#39;1&#39;</span> <span class="o">&lt;=</span> <span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="s1">&#39;9&#39;</span><span class="p">:</span>
+        <span class="n">total_count</span> <span class="o">+=</span> <span class="n">decode_seq_brute_force</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">start_pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># subprobelm T(n - 2)</span>
+    <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;2&#39;</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="s1">&#39;6&#39;</span><span class="p">):</span>
+            <span class="n">total_count</span> <span class="o">+=</span> <span class="n">decode_seq_brute_force</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">start_pos</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">total_count</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Time and space complexity is exponential in <code>n</code> as subproblem are repeatedly/recursively solved and each recurssion requires its call stack</p>
+<h3 id="Unit-test">Unit test<a class="anchor-link" href="#Unit-test"> </a></h3>
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test_decode</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="c1"># 128 -&gt; [ABH, LH]</span>
+    <span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="mi">128</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    
+    <span class="c1"># 123 -&gt; [ABC, AW, LC]</span>
+    <span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="mi">123</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+    
+    <span class="c1"># 1221 -&gt; [ABBA, ABU, AVA, LVA, LU]</span>
+    <span class="k">assert</span> <span class="n">f</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="mi">1221</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="mi">5</span>
+
+<span class="n">test_decode</span><span class="p">(</span><span class="n">decode_seq_brute_force</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Dynamic-programing">Dynamic programing<a class="anchor-link" href="#Dynamic-programing"> </a></h3><p>Using bottom up approach we can solve smaller problem first. The solution to larger problem become trivial if subproblem is already solved as it requires adding subproblem solution [$\theta(n)$]</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">decode_seq</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dummy</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># base case</span>
+    <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="k">for</span> <span class="n">start_pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;1&#39;</span> <span class="o">&lt;=</span> <span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="s1">&#39;9&#39;</span><span class="p">:</span>
+            <span class="n">T</span><span class="p">[</span><span class="n">start_pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;2&#39;</span> <span class="ow">and</span> <span class="n">seq</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="s1">&#39;6&#39;</span><span class="p">):</span>
+            <span class="n">T</span><span class="p">[</span><span class="n">start_pos</span><span class="p">]</span> <span class="o">+=</span> <span class="n">T</span><span class="p">[</span><span class="n">start_pos</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">T</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_decode</span><span class="p">(</span><span class="n">decode_seq</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="projekt2k22/codebook"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/codebook/dynamic%20programming/counting/2020/02/16/decoding-digits.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/codebook/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/codebook/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/codebook/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Improving myself one commit at a time.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/projekt2k22" title="projekt2k22"><svg class="svg-icon grey"><use xlink:href="/codebook/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/stochent" title="stochent"><svg class="svg-icon grey"><use xlink:href="/codebook/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
