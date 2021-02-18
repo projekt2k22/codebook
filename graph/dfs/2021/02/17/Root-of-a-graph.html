@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Find root vertex of a graph | Project 2K22</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Find root vertex of a graph" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Given a graph find a vertex v such that all other vertex is reachable from v" />
+<meta property="og:description" content="Given a graph find a vertex v such that all other vertex is reachable from v" />
+<link rel="canonical" href="https://projekt2k22.github.io/codebook/graph/dfs/2021/02/17/Root-of-a-graph.html" />
+<meta property="og:url" content="https://projekt2k22.github.io/codebook/graph/dfs/2021/02/17/Root-of-a-graph.html" />
+<meta property="og:site_name" content="Project 2K22" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-02-17T00:00:00-06:00" />
+<script type="application/ld+json">
+{"url":"https://projekt2k22.github.io/codebook/graph/dfs/2021/02/17/Root-of-a-graph.html","@type":"BlogPosting","headline":"Find root vertex of a graph","dateModified":"2021-02-17T00:00:00-06:00","datePublished":"2021-02-17T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://projekt2k22.github.io/codebook/graph/dfs/2021/02/17/Root-of-a-graph.html"},"description":"Given a graph find a vertex v such that all other vertex is reachable from v","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/codebook/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://projekt2k22.github.io/codebook/feed.xml" title="Project 2K22" /><link rel="shortcut icon" type="image/x-icon" href="/codebook/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/codebook/">Project 2K22</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/codebook/about/">About Me</a><a class="page-link" href="/codebook/search/">Search</a><a class="page-link" href="/codebook/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Find root vertex of a graph</h1><p class="page-description">Given a graph find a vertex `v` such that all other vertex is reachable from `v`</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-02-17T00:00:00-06:00" itemprop="datePublished">
+        Feb 17, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/codebook/categories/#graph">graph</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/codebook/categories/#dfs">dfs</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/projekt2k22/codebook/tree/master/_notebooks/2021-02-17-Root-of-a-graph.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/codebook/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/projekt2k22/codebook/master?filepath=_notebooks%2F2021-02-17-Root-of-a-graph.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/codebook/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/projekt2k22/codebook/blob/master/_notebooks/2021-02-17-Root-of-a-graph.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/codebook/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2021-02-17-Root-of-a-graph.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Optional</span>
+<span class="o">!</span>pip install networkx
+<span class="o">!</span>pip install matplotlib
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Problem">Problem<a class="anchor-link" href="#Problem"> </a></h2><p>Given a directed graph, find a root vertex of the graph. The root vertex $\mathcal{v}$ is defined as any vertex $\mathcal{v} \in \mathcal{G(V, E)}$ such that all other vertex in $\mathcal{G}$ can be reached.</p>
+<p>For example in the graph below, the vertex <code>4</code> is a root vertex as all other vertex can be reached from <code>4</code></p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+
+<span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="n">G</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">font_weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># total number of nodes in the graph</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">6</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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goODa35jA7p7927pnZQPFlxBQUHpnZRBQUEYPnw4goKC4O3tbffbn5Ft4YiPqBZyVRrEn81ESpYSSrUe7go5Arzd8cJjtZsGMxgMiIuLw6JFi9ChQwcsXboUPXv2NGlmrVaL1NTUCgV38+ZNdOrUqcIorm3bttzujOwCi4+oGhcyCvDJkXQcTcsBgDK7fZTc+BDm74UZob4I9ql444PRaCw9MaFJkyaIiYlBWFhYg2Y0GAy4fPlyhYK7cuUK2rdvX2YdXFBQEDp27Ai5nJM9ZL9YfERV2Hbyar1vdRcEAQkJCZg/fz4kEgmWLl2KZ5999qGmDAVBwPXr1ysUXEpKCry9vSuM4Pz9/eHkxJsyiMpj8RFV4n7p1Wdxc2e0Lv4TUVFRKCgoKD0xoS6FJwgCsrOzK9xJmZSUBHd39wojuM6dO9vUbi5EpsbiIyqnuu2s7iYdRe7XHwAA3HoMR9OBU8s8LzXqIDm0GovmTMHYsWNrPDEhLy+v0jspAVR6J2WTJk2q/Twiqhkn+onK+eRIOtT6iqWnV+Yi7/u1gFQGGCvf41GQOmDgrPcxYcLjZR5XqVRISkqqUHBFRUVlRnAjR45EUFAQmjdvzjspiUyExUf0gFyVBkfTcipc0xMEAXe++RAyt2ZQeD2Ce8m/VPp+AcDh1Bx8umU7/kz5vbTgsrOzERAQUFpyAwcORFBQEHx8fFhwRGbG4iN6QPzZzEofLzqzH+rMJLSc+CGUZ/ZX+xk6nRZbj1/CMz4umDx5MoKCgtChQwe7PSiWyNKw+IgekJKlrHBAqTbnKvKPboFH3wlwbNGh5g+ROaDHgOcwP+JRE6UkoofB4iN6gFKtr/DYvdQTgEEP9fXfoclIhPb2nwCA4kunkC93RJOwSZV8js7UUYmonlh8RA9wV1TyW0IQAAhQXzlb5mF9YTY0N1Kq+Bxxjtohopqx+IgeEODtDid5VpnpTo++4+HRd3zpP+ceXIW7f/xc6XIG4P6OLgEtrfOEAiJ7wI35iB4w6rE2D/0ZAoBR3R/+c4jINLiAnaicqVt/w4/J2dVuU1YViQQID2yBdRN6NHwwImoQHPERlTMzzBcKef2WHijkMswI823gRETUkFh8ROUE+3ggcnAAnB3q9tvj/l6dAejapuIpDURkOXhzC1ElSk5ZqO/pDERkuXiNj6gaFzMLsPZIOg6n5kACQF3JeXz9/b0wI8yXIz0iK8HiI6qFOyoN4s9lIuVWEZRqHdwVDgho6YZR3Wt3AjsRWQ4WHxER2RXe3EJERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHaFxUdERHbl/wPwnCDAD2q+1QAAAABJRU5ErkJggg==
+" />
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Solution">Solution<a class="anchor-link" href="#Solution"> </a></h2><p>This can be solved by doing depth first search (DFS) on the graph and keeping track of the node with highest departure time. The vertex with highest departure time could be the root node if all other node can be reached by doing DFS starting that vertex</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+
+<span class="k">class</span> <span class="nc">Graph</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_vertices</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_vertices</span> <span class="o">=</span> <span class="n">num_vertices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adj</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_vertices</span><span class="p">)]</span>
+        
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="k">def</span> <span class="nf">add_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">src</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>        
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">depth_first_search</span><span class="p">(</span><span class="n">g</span><span class="p">:</span> <span class="n">Graph</span><span class="p">,</span> <span class="n">start_vertex_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">visited</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
+
+    <span class="n">visited</span><span class="p">[</span><span class="n">start_vertex_id</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">adj</span><span class="p">[</span><span class="n">start_vertex_id</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visited</span><span class="p">[</span><span class="n">vertex</span><span class="p">]:</span>
+            <span class="n">depth_first_search</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">find_root_vertex</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    
+    <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">graph</span><span class="o">.</span><span class="n">num_vertices</span>
+    
+    <span class="c1"># last visited vertex in DFS has the highest departure time</span>
+    <span class="n">last_visited</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">num_vertices</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">last_visited</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">depth_first_search</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+    
+    <span class="c1"># Re-run DFS starting last_visited node as the root </span>
+    <span class="c1"># to verify if all vertex can be reached</span>
+    <span class="n">visited</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">graph</span><span class="o">.</span><span class="n">num_vertices</span>
+    <span class="n">depth_first_search</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">last_visited</span><span class="p">,</span> <span class="n">visited</span><span class="p">)</span>
+    
+    <span class="c1"># verifying if all nodes has been visited</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">num_vertices</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">visited</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+    
+    <span class="c1"># returning the root candidate</span>
+    <span class="k">return</span> <span class="n">last_visited</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<details class="description">
+      <summary class="btn btn-sm" data-open="Hide Code" data-close="Show Code"></summary>
+        <p><div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># build a directed graph from the given edges</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">Graph</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+
+<span class="c1"># find the root vertex in the graph</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">find_root_vertex</span><span class="p">(</span><span class="n">graph</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">root</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The root vertex is </span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The root vertex does not exist&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+</p>
+    </details>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>The root vertex is 4
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="projekt2k22/codebook"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/codebook/graph/dfs/2021/02/17/Root-of-a-graph.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/codebook/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/codebook/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/codebook/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Improving myself one commit at a time.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/projekt2k22" title="projekt2k22"><svg class="svg-icon grey"><use xlink:href="/codebook/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/stochent" title="stochent"><svg class="svg-icon grey"><use xlink:href="/codebook/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
